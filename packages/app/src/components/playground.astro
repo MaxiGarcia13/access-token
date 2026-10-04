@@ -4,6 +4,7 @@ import PayloadPanel from './payload-panel.astro';
 import PlaygroundHero from './playground-hero.astro';
 import PlaygroundToolbar from './playground-toolbar.astro';
 import SigningPanel from './signing-panel.astro';
+import UsageExample from './usage-example.astro';
 import VerificationPanel from './verification-panel.astro';
 
 const defaultSecret = 'playground-secret';
@@ -24,6 +25,8 @@ const defaultData = {};
       <SigningPanel defaultSecret={defaultSecret} defaultTtlMinutes={defaultTtlMinutes} />
     </div>
   </div>
+
+  <UsageExample />
 </section>
 
 <script>

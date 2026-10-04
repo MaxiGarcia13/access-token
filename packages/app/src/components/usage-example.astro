@@ -1,0 +1,96 @@
+---
+const installCommand = 'npm install @maxigarcia/access-token';
+
+const usageExample = `import { createAccessToken, decodeToken } from '@maxigarcia/access-token';
+
+const accessToken = createAccessToken(process.env.ACCESS_TOKEN_SECRET!, {
+  ttlMs: 10 * 60 * 1000, // 10 minutes
+  clockToleranceMs: 5 * 60 * 1000, // 5 minutes
+});
+
+// Issue a token (e.g. set as a cookie after a successful challenge)
+const value = accessToken.create();
+
+// Optional custom claims
+const withData = accessToken.create({
+  data: { sub: 'user-1', scope: 'read' },
+});
+
+// Verify on protected routes
+if (!accessToken.isValid(value)) {
+  throw new Error('Unauthorized');
+}
+
+// Inspect without verifying
+const decoded = decodeToken(withData);
+// { expiresAt, data, signature, signedPayload }`;
+---
+
+<section class="mt-14 border-t border-line pt-12" data-usage-example>
+  <header class="mb-6">
+    <h2 class="m-0 font-display text-2xl tracking-[-0.02em] text-brand">Get started</h2>
+    <p class="mt-2 max-w-2xl text-[0.92rem] leading-relaxed text-muted">
+      Install the package, then create and verify short-lived HMAC tokens in a few lines.
+    </p>
+  </header>
+
+  <div class="grid gap-4">
+    <article class="rounded-panel border border-line bg-bg-1/78 p-4 shadow-panel backdrop-blur-[10px]">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <h3 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Install</h3>
+        <button
+          type="button"
+          class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
+          data-copy-code
+          title="Copy install command"
+        >
+          Copy
+        </button>
+      </div>
+      <pre
+        class="m-0 overflow-x-auto rounded-field border border-line bg-ink p-3.5 text-[0.82rem] leading-relaxed text-part-signature"
+        data-code-block><code>{installCommand}</code></pre>
+    </article>
+
+    <article class="rounded-panel border border-line bg-bg-1/78 p-4 shadow-panel backdrop-blur-[10px]">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <h3 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Usage</h3>
+        <button
+          type="button"
+          class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
+          data-copy-code
+          title="Copy usage example"
+        >
+          Copy
+        </button>
+      </div>
+      <pre
+        class="m-0 overflow-x-auto rounded-field border border-line bg-ink p-3.5 text-[0.82rem] leading-relaxed text-part-payload"
+        data-code-block><code>{usageExample}</code></pre>
+    </article>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector('[data-usage-example]');
+  if (!root) {
+    throw new Error('Usage example root missing');
+  }
+
+  root.querySelectorAll<HTMLButtonElement>('[data-copy-code]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const block = button.closest('article')?.querySelector('[data-code-block]');
+      const value = block?.textContent;
+      if (!value) {
+        return;
+      }
+
+      await navigator.clipboard.writeText(value);
+      const previous = button.textContent;
+      button.textContent = 'Copied';
+      window.setTimeout(() => {
+        button.textContent = previous;
+      }, 1200);
+    });
+  });
+</script>
