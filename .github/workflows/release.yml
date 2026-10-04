@@ -49,6 +49,8 @@ jobs:
 
   release-notes:
     if: ${{ needs.release.outputs.tag != '' }}
+    permissions:
+      contents: write
     needs: release
     uses: MaxiGarcia13/gh-actions/.github/workflows/create-release-notes.yml@main
     with:
