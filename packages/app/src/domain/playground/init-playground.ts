@@ -34,7 +34,12 @@ export function initPlayground(root: HTMLElement) {
 
   bindPlaygroundEvents({
     els,
+    view,
     scheduleSync,
+    cancelPending: () => {
+      requestId += 1;
+      scheduleSync.cancel();
+    },
     setSyncing: (value) => {
       syncing = value;
     },

@@ -121,8 +121,11 @@ export async function syncFromToken({
   renderTokenHighlight(els, token);
 
   if (!token) {
-    view.setPending(false);
-    view.update({ error: 'Paste a token to inspect' });
+    writePayload(els, {}, setSyncing);
+    setSyncing(true);
+    els.secretInput.value = '';
+    setSyncing(false);
+    view.clear();
     return;
   }
 

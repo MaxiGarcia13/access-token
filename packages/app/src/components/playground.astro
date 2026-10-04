@@ -1,4 +1,9 @@
 ---
+import {
+	defaultPayload,
+	defaultSecret,
+	defaultTtlMinutes,
+} from '../domain/playground/example';
 import EncodedTokenPanel from './encoded-token-panel.astro';
 import PayloadPanel from './payload-panel.astro';
 import PlaygroundHero from './playground-hero.astro';
@@ -6,10 +11,6 @@ import PlaygroundToolbar from './playground-toolbar.astro';
 import SigningPanel from './signing-panel.astro';
 import UsageExample from './usage-example.astro';
 import VerificationPanel from './verification-panel.astro';
-
-const defaultSecret = 'playground-secret';
-const defaultTtlMinutes = 10;
-const defaultData = {};
 ---
 
 <section class="mx-auto w-[min(1120px,calc(100%-2rem))] py-10 pb-16" data-playground>
@@ -21,8 +22,8 @@ const defaultData = {};
 
     <div class="grid gap-4">
       <VerificationPanel />
-      <PayloadPanel defaultData={defaultData} />
-      <SigningPanel defaultSecret={defaultSecret} defaultTtlMinutes={defaultTtlMinutes} />
+      <PayloadPanel defaultData={defaultPayload} />
+      <SigningPanel defaultSecret={defaultSecret} defaultTtlMinutes={Number(defaultTtlMinutes)} />
     </div>
   </div>
 

@@ -41,7 +41,14 @@ export function createVerificationView(els: PlaygroundElements) {
     setStatus('Ready', 'ok');
   }
 
-  return { setPending, setStatus, update };
+  function clear(message = 'Paste a token to inspect') {
+    expiresAtEl.textContent = '—';
+    setExpiresAtMs(expiresInEl, null);
+    setPending(false);
+    setStatus(message, 'error');
+  }
+
+  return { setPending, setStatus, update, clear };
 }
 
 export type VerificationView = ReturnType<typeof createVerificationView>;

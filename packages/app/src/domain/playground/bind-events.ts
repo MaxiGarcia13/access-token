@@ -3,18 +3,23 @@ import type { SyncSource } from './sync';
 import type { VerificationView } from './verification-view';
 import { debounce } from '@/utils/debounce';
 import { examplePayload, exampleSecret, exampleTtlMinutes } from './example';
+import { clearEncodedToken } from './reset-fields';
 import { renderTokenHighlight } from './sync';
 
 interface BindOptions {
   els: PlaygroundElements;
-  scheduleSync: (source?: SyncSource) => void;
+  view: VerificationView;
+  scheduleSync: ((source?: SyncSource) => void) & { cancel: () => void };
+  cancelPending: () => void;
   setSyncing: (value: boolean) => void;
   isSyncing: () => boolean;
 }
 
 export function bindPlaygroundEvents({
   els,
+  view,
   scheduleSync,
+  cancelPending,
   setSyncing,
   isSyncing,
 }: BindOptions) {
@@ -23,7 +28,6 @@ export function bindPlaygroundEvents({
     tokenInput,
     tokenHighlight,
     payloadInput,
-    payloadError,
     secretInput,
     ttlInput,
     toleranceInput,
@@ -31,15 +35,17 @@ export function bindPlaygroundEvents({
   } = els;
 
   tokenInput.addEventListener('input', () => {
-    if (isSyncing())
+    if (isSyncing()) {
       return;
+    }
     renderTokenHighlight(els, tokenInput.value);
     scheduleSync('token');
   });
 
   payloadInput.addEventListener('input', () => {
-    if (isSyncing())
+    if (isSyncing()) {
       return;
+    }
     scheduleSync('payload');
   });
 
@@ -48,8 +54,9 @@ export function bindPlaygroundEvents({
   toleranceInput.addEventListener('input', () => scheduleSync());
 
   root.querySelector('[data-copy-token]')?.addEventListener('click', async () => {
-    if (!tokenInput.value)
+    if (!tokenInput.value) {
       return;
+    }
     await navigator.clipboard.writeText(tokenInput.value);
     statusEl.textContent = 'Token copied';
   });
@@ -60,14 +67,9 @@ export function bindPlaygroundEvents({
   });
 
   root.querySelector('[data-clear-token]')?.addEventListener('click', () => {
-    setSyncing(true);
-    tokenInput.value = '';
-    renderTokenHighlight(els, '');
-    payloadInput.value = '{}';
-    payloadError.hidden = true;
-    payloadError.textContent = '';
-    setSyncing(false);
-    scheduleSync('token');
+    cancelPending();
+    clearEncodedToken(els, setSyncing);
+    view.clear();
   });
 
   root.querySelector('[data-generate-example]')?.addEventListener('click', () => {
@@ -94,9 +96,15 @@ export function createScheduler(
 
   const debounced = debounce(() => run(source), ms);
 
-  return (nextSource: SyncSource = source) => {
+  const schedule = (nextSource: SyncSource = source) => {
     source = nextSource;
     view.setPending(true);
     debounced();
   };
+
+  schedule.cancel = () => {
+    debounced.cancel();
+  };
+
+  return schedule;
 }
