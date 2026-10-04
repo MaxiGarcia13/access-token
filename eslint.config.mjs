@@ -4,5 +4,6 @@ export default eslintConfig(
   {
     typescript: true,
     markdown: true,
+    astro: true,
   },
 );
