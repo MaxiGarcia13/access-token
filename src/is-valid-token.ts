@@ -1,3 +1,4 @@
+import { isDigits } from './is-digits.js';
 import { safeEqual } from './safe-equal.js';
 import { sign } from './sign.js';
 
@@ -9,7 +10,7 @@ export function isValidToken(secret: string) {
 
     const [expiresAt, signature] = value.split('.');
 
-    if (!expiresAt || !signature || !/^\d+$/.test(expiresAt)) {
+    if (!expiresAt || !signature || !isDigits(expiresAt)) {
       return false;
     }
 
