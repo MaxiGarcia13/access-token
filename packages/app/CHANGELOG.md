@@ -1,3 +1,18 @@
+## 0.2.1 (2026-10-04)
+
+### 🧹 Chores
+
+- Update clean scripts in package.json files ([f0355f5](https://github.com/MaxiGarcia13/access-token/commit/f0355f5))
+- Update project configuration and dependencies ([5251db7](https://github.com/MaxiGarcia13/access-token/commit/5251db7))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/access-token to 0.8.1
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.2.0 (2026-10-04)
 
 ### 🚀 Features
