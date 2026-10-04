@@ -1,0 +1,42 @@
+---
+import EncodedTokenPanel from './encoded-token-panel.astro';
+import PayloadPanel from './payload-panel.astro';
+import PlaygroundHero from './playground-hero.astro';
+import PlaygroundToolbar from './playground-toolbar.astro';
+import PreviewPanel from './preview-panel.astro';
+import SigningPanel from './signing-panel.astro';
+
+const defaultSecret = 'playground-secret';
+const defaultTtlMinutes = 60;
+const defaultData = {
+  sub: 'user-1',
+  scope: 'read',
+};
+---
+
+<section class="mx-auto w-[min(1120px,calc(100%-2rem))] py-10 pb-16" data-playground>
+  <PlaygroundHero />
+  <PlaygroundToolbar />
+
+  <div class="grid animate-rise-grid grid-cols-1 gap-4 min-[861px]:grid-cols-[1.1fr_0.9fr]">
+    <EncodedTokenPanel />
+
+    <div class="grid gap-4">
+      <PayloadPanel defaultData={defaultData} />
+      <PreviewPanel defaultData={defaultData} />
+      <SigningPanel defaultSecret={defaultSecret} defaultTtlMinutes={defaultTtlMinutes} />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initPlayground } from '../scripts/playground-client';
+
+  const root = document.querySelector<HTMLElement>('[data-playground]');
+
+  if (!root) {
+    throw new Error('Playground root missing');
+  }
+
+  initPlayground(root);
+</script>
