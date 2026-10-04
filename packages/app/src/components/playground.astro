@@ -7,11 +7,8 @@ import SigningPanel from './signing-panel.astro';
 import VerificationPanel from './verification-panel.astro';
 
 const defaultSecret = 'playground-secret';
-const defaultTtlMinutes = 60;
-const defaultData = {
-  sub: 'user-1',
-  scope: 'read',
-};
+const defaultTtlMinutes = 10;
+const defaultData = {};
 ---
 
 <section class="mx-auto w-[min(1120px,calc(100%-2rem))] py-10 pb-16" data-playground>
