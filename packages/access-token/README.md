@@ -18,7 +18,7 @@ npm install @maxigarcia/access-token
 ```
 
 ```ts
-import { createAccessToken, decodeToken } from "@maxigarcia/access-token";
+import { createAccessToken, decodeToken } from '@maxigarcia/access-token';
 
 const accessToken = createAccessToken(process.env.ACCESS_TOKEN_SECRET!, {
   ttlMs: 10 * 60 * 1000, // 10 minutes
@@ -30,12 +30,12 @@ const value = accessToken.create();
 
 // Optional custom claims (base64url JSON payload)
 const withData = accessToken.create({
-  data: { sub: "user-1", scope: "read" },
+  data: { sub: 'user-1', scope: 'read' },
 });
 
 // Verify on protected routes
 if (!accessToken.isValid(value)) {
-  throw new Error("Unauthorized");
+  throw new Error('Unauthorized');
 }
 
 // Inspect without verifying
