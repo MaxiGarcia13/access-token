@@ -5,7 +5,7 @@
   "description": "Tiny signed access tokens for cookie-based API auth — HMAC expiry checks, no session store.",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
-  "homepage": "https://github.com/MaxiGarcia13/access-token#readme",
+  "homepage": "https://github.com/MaxiGarcia13/access-token/tree/main/packages/access-token#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaxiGarcia13/access-token.git"
