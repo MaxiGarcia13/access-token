@@ -14,8 +14,8 @@ npm install @maxigarcia/access-token
 import { createAccessToken } from '@maxigarcia/access-token';
 
 const accessToken = createAccessToken(process.env.ACCESS_TOKEN_SECRET!, {
-  ttlMs: 60 * 60 * 1000, // optional, defaults to 1 hour
-  clockToleranceMs: 5_000, // optional, defaults to 0
+  ttlMs: 10 * 60 * 1000, // 10 minutes
+  clockToleranceMs: 5 * 60 * 1000, // 5 minutes
 });
 
 // Issue a token (e.g. set as a cookie after a successful challenge)
