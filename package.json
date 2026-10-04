@@ -13,6 +13,15 @@
   "bugs": {
     "url": "https://github.com/MaxiGarcia13/access-token/issues"
   },
+  "keywords": [
+    "access",
+    "token",
+    "authentication",
+    "authorization",
+    "auth",
+    "api",
+    "cookie"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
