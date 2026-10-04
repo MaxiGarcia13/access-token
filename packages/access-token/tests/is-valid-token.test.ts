@@ -34,7 +34,7 @@ describe('isValidToken', () => {
 
   it('returns false when the token has expired', () => {
     const past = Date.now() - ttlMs - 1;
-    const value = createTokenValue(secret, ttlMs)(past);
+    const value = createTokenValue(secret, ttlMs)({ now: past });
 
     expect(isValid(value)).toBe(false);
   });
@@ -43,7 +43,7 @@ describe('isValidToken', () => {
     const clockToleranceMs = 5_000;
     const isValidWithTolerance = isValidToken(secret, clockToleranceMs);
     const expiredBy = 2_000;
-    const value = createTokenValue(secret, ttlMs)(Date.now() - ttlMs - expiredBy);
+    const value = createTokenValue(secret, ttlMs)({ now: Date.now() - ttlMs - expiredBy });
 
     expect(isValid(value)).toBe(false);
     expect(isValidWithTolerance(value)).toBe(true);
@@ -52,7 +52,7 @@ describe('isValidToken', () => {
   it('rejects tokens that are beyond clockToleranceMs', () => {
     const clockToleranceMs = 1_000;
     const isValidWithTolerance = isValidToken(secret, clockToleranceMs);
-    const value = createTokenValue(secret, ttlMs)(Date.now() - ttlMs - 2_000);
+    const value = createTokenValue(secret, ttlMs)({ now: Date.now() - ttlMs - 2_000 });
 
     expect(isValidWithTolerance(value)).toBe(false);
   });
@@ -70,5 +70,17 @@ describe('isValidToken', () => {
     const tampered = `${expiresAt}.${signature!.slice(0, -1)}x`;
 
     expect(isValid(tampered)).toBe(false);
+  });
+
+  it('validates tokens that include payload data', () => {
+    const value = createTokenValue(secret, ttlMs)({ data: { room: 'a1' } });
+
+    expect(isValid(value)).toBe(true);
+  });
+
+  it('rejects payload tokens signed with a different secret', () => {
+    const value = createTokenValue(secret, ttlMs)({ data: { room: 'a1' } });
+
+    expect(isValidToken('other-secret')(value)).toBe(false);
   });
 });

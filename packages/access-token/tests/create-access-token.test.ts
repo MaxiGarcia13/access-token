@@ -5,13 +5,14 @@ import { createAccessToken } from '../src/create-access-token.js';
 describe('createAccessToken', () => {
   const secret = 'test-secret';
 
-  it('exposes create and isValid', () => {
+  it('exposes create, isValid, and decode', () => {
     const token = createAccessToken(secret);
 
     expect(token).toEqual(
       expect.objectContaining({
         create: expect.any(Function),
         isValid: expect.any(Function),
+        decode: expect.any(Function),
       }),
     );
   });
@@ -27,7 +28,7 @@ describe('createAccessToken', () => {
     const ttlMs = 5_000;
     const now = Date.now();
     const token = createAccessToken(secret, { ttlMs });
-    const value = token.create(now);
+    const value = token.create({ now });
     const [expiresAt] = value.split('.');
 
     expect(Number(expiresAt)).toBe(now + ttlMs);
@@ -45,8 +46,17 @@ describe('createAccessToken', () => {
     const ttlMs = 5_000;
     const clockToleranceMs = 3_000;
     const token = createAccessToken(secret, { ttlMs, clockToleranceMs });
-    const value = token.create(Date.now() - ttlMs - 1_000);
+    const value = token.create({ now: Date.now() - ttlMs - 1_000 });
 
     expect(token.isValid(value)).toBe(true);
+  });
+
+  it('creates and validates tokens with custom data', () => {
+    const token = createAccessToken(secret);
+    const data = { sub: 'user-1', scope: 'read' };
+    const value = token.create({ data });
+
+    expect(token.isValid(value)).toBe(true);
+    expect(token.decode(value)?.data).toEqual(data);
   });
 });
