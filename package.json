@@ -1,18 +1,18 @@
 {
   "name": "access-token",
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
   "description": "Tiny signed access tokens for cookie-based API auth — HMAC expiry checks, no session store.",
+  "author": "Maximiliano Garcia Mortigliengo",
+  "license": "ISC",
   "homepage": "https://github.com/MaxiGarcia13/access-token#readme",
-  "bugs": {
-    "url": "https://github.com/MaxiGarcia13/access-token/issues"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaxiGarcia13/access-token.git"
   },
-  "license": "ISC",
-  "author": "Maximiliano Garcia Mortigliengo",
+  "bugs": {
+    "url": "https://github.com/MaxiGarcia13/access-token/issues"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -29,6 +29,14 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "rm -rf dist node_modules"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "clean": "rm -rf dist node_modules",
+    "phoenix": "npm run clean && npm i && npm run build"
+  },
+  "dependencies": {
+    "@maxigarcia/eslint-config": "^1.14.1",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.3"
   }
 }
