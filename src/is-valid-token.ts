@@ -9,7 +9,7 @@ export function isValidToken(secret: string) {
 
     const [expiresAt, signature] = value.split('.');
 
-    if (!expiresAt || !signature) {
+    if (!expiresAt || !signature || !/^\d+$/.test(expiresAt)) {
       return false;
     }
 

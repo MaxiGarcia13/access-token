@@ -26,6 +26,12 @@ describe('isValidToken', () => {
     expect(isValid('1234567890.')).toBe(false);
   });
 
+  it('returns false when expiresAt is not an integer timestamp', () => {
+    expect(isValid(`abc.${sign(secret)('abc')}`)).toBe(false);
+    expect(isValid(`1e21.${sign(secret)('1e21')}`)).toBe(false);
+    expect(isValid(`12.34.${sign(secret)('12.34')}`)).toBe(false);
+  });
+
   it('returns false when the token has expired', () => {
     const past = Date.now() - ttlMs - 1;
     const value = createTokenValue(secret, ttlMs)(past);
