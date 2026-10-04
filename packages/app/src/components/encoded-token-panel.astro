@@ -1,0 +1,42 @@
+<section class="rounded-panel border border-line bg-bg-1/78 p-4 shadow-panel backdrop-blur-[10px]">
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <h2 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Encoded token</h2>
+    <div class="flex gap-1.5">
+      <button
+        type="button"
+        class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
+        data-copy-token
+        title="Copy token"
+      >
+        Copy
+      </button>
+      <button
+        type="button"
+        class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
+        data-clear-token
+        title="Clear token"
+      >
+        Clear
+      </button>
+    </div>
+  </div>
+  <label class="mb-1.5 block text-[0.72rem] tracking-wide text-muted uppercase" for="token-input">
+    expiresAt · payload · signature
+  </label>
+  <div class="relative min-h-56 min-[861px]:min-h-[22rem]">
+    <pre
+      class="pointer-events-none absolute inset-0 m-0 overflow-auto rounded-field border border-line bg-ink p-4 text-[0.86rem] leading-relaxed break-all whitespace-pre-wrap text-transparent"
+      data-token-highlight
+      aria-hidden="true">
+    </pre>
+    <textarea
+      id="token-input"
+      class="absolute inset-0 m-0 resize-none overflow-auto rounded-field border border-line bg-transparent p-4 text-[0.86rem] leading-relaxed break-all whitespace-pre-wrap text-transparent caret-text focus:outline focus:outline-brand/35"
+      data-token-input
+      spellcheck="false"
+      autocomplete="off"
+      placeholder="Token appears here…"
+    >
+    </textarea>
+  </div>
+</section>

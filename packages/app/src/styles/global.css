@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg-0: #0d120c;
+  --color-bg-1: #141b13;
+  --color-bg-2: #1c251a;
+  --color-bg-3: #243022;
+  --color-ink: #0f160e;
+  --color-line: rgb(214 232 196 / 0.12);
+  --color-text: #e7f0df;
+  --color-muted: #9aab90;
+  --color-brand: #d7ff6a;
+  --color-brand-ink: #152012;
+  --color-accent: #7dd3a0;
+  --color-warn: #f0b35a;
+  --color-danger: #ff7b72;
+  --color-ok: #8dffb0;
+  --color-part-expiry: #f0b35a;
+  --color-part-payload: #7eb8ff;
+  --color-part-signature: #8dffb0;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --radius-panel: 14px;
+  --radius-field: 12px;
+  --shadow-panel: 0 24px 80px rgb(0 0 0 / 0.35);
+  --animate-rise: playground-rise 0.7s ease both;
+  --animate-rise-delayed: playground-rise 0.7s ease 0.08s both;
+  --animate-rise-grid: playground-rise 0.75s ease 0.14s both;
+  --animate-shimmer: shimmer 1.1s ease-in-out infinite;
+}
+
+@keyframes playground-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    @apply m-0 min-h-full;
+  }
+
+  body {
+    color-scheme: dark;
+    @apply bg-bg-0 font-mono text-text antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 10% -10%, rgb(215 255 106 / 0.12), transparent 55%),
+      radial-gradient(900px 500px at 90% 0%, rgb(125 211 160 / 0.1), transparent 50%),
+      linear-gradient(180deg, #121910 0%, var(--color-bg-0) 45%, #0a0e09 100%);
+    background-attachment: fixed;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+}
+
+/* Dynamically injected token parts */
+.part-expiry {
+  @apply text-part-expiry;
+}
+
+.part-payload {
+  @apply text-part-payload;
+}
+
+.part-signature {
+  @apply text-part-signature;
+}
+
+.dot {
+  @apply text-muted;
+}

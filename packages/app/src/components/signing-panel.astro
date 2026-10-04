@@ -1,0 +1,49 @@
+---
+interface Props {
+  defaultSecret: string;
+  defaultTtlMinutes: number;
+}
+
+const { defaultSecret, defaultTtlMinutes } = Astro.props;
+---
+
+<section class="rounded-panel border border-line bg-bg-1/78 p-4 shadow-panel backdrop-blur-[10px]">
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <h2 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Signing</h2>
+  </div>
+  <label class="mb-1.5 block text-[0.72rem] tracking-wide text-muted uppercase" for="secret-input">Secret</label>
+  <input
+    id="secret-input"
+    class="w-full rounded-field border border-line bg-ink p-3.5 text-text"
+    data-secret-input
+    type="text"
+    value={defaultSecret}
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <div class="mt-3 grid grid-cols-1 gap-3 min-[861px]:grid-cols-2">
+    <label class="grid gap-1.5 text-xs text-muted">
+      <span>TTL (minutes)</span>
+      <input
+        class="w-full rounded-field border border-line bg-ink p-3.5 text-text"
+        data-ttl-input
+        type="number"
+        min="1"
+        step="1"
+        value={defaultTtlMinutes}
+      />
+    </label>
+    <label class="grid gap-1.5 text-xs text-muted">
+      <span>Clock tolerance (sec)</span>
+      <input
+        class="w-full rounded-field border border-line bg-ink p-3.5 text-text"
+        data-tolerance-input
+        type="number"
+        min="0"
+        step="1"
+        value="0"
+      />
+    </label>
+  </div>
+  <p class="mt-3 text-[0.72rem] text-muted">Demo only — don’t paste production secrets.</p>
+</section>
