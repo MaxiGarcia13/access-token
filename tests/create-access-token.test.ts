@@ -1,27 +1,19 @@
 import { describe, expect, it } from 'vitest';
 
 import { createAccessToken } from '../src/create-access-token.js';
-import { sign } from '../src/sign.js';
 
 describe('createAccessToken', () => {
   const secret = 'test-secret';
 
-  it('exposes create, isValid, and sign', () => {
+  it('exposes create and isValid', () => {
     const token = createAccessToken(secret);
 
     expect(token).toEqual(
       expect.objectContaining({
         create: expect.any(Function),
         isValid: expect.any(Function),
-        sign: expect.any(Function),
       }),
     );
-  });
-
-  it('signs payloads with the provided secret', () => {
-    const token = createAccessToken(secret);
-
-    expect(token.sign('payload')).toBe(sign(secret)('payload'));
   });
 
   it('creates a valid token with the default ttl', () => {
