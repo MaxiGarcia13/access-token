@@ -6,4 +6,11 @@ export default eslintConfig(
     markdown: true,
     astro: true,
   },
+  {
+    ignores: [
+      'packages/**/dist/**',
+      'packages/**/node_modules/**',
+      'packages/**/.astro/**',
+    ],
+  },
 );
