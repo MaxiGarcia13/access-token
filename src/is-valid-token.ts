@@ -2,7 +2,9 @@ import { isDigits } from './is-digits.js';
 import { safeEqual } from './safe-equal.js';
 import { sign } from './sign.js';
 
-export function isValidToken(secret: string) {
+export function isValidToken(secret: string, clockToleranceMs = 0) {
+  const toleranceMs = Math.max(0, clockToleranceMs);
+
   return (value: string | undefined | null) => {
     if (!value) {
       return false;
@@ -14,7 +16,7 @@ export function isValidToken(secret: string) {
       return false;
     }
 
-    if (Number(expiresAt) < Date.now()) {
+    if (Number(expiresAt) + toleranceMs < Date.now()) {
       return false;
     }
 

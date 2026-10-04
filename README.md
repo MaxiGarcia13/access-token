@@ -15,6 +15,7 @@ import { createAccessToken } from '@maxigarcia/access-token';
 
 const accessToken = createAccessToken(process.env.ACCESS_TOKEN_SECRET!, {
   ttlMs: 60 * 60 * 1000, // optional, defaults to 1 hour
+  clockToleranceMs: 5_000, // optional, defaults to 0
 });
 
 // Issue a token (e.g. set as a cookie after a successful challenge)

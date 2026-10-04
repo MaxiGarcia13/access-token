@@ -39,6 +39,24 @@ describe('isValidToken', () => {
     expect(isValid(value)).toBe(false);
   });
 
+  it('accepts tokens within clockToleranceMs after expiry', () => {
+    const clockToleranceMs = 5_000;
+    const isValidWithTolerance = isValidToken(secret, clockToleranceMs);
+    const expiredBy = 2_000;
+    const value = createTokenValue(secret, ttlMs)(Date.now() - ttlMs - expiredBy);
+
+    expect(isValid(value)).toBe(false);
+    expect(isValidWithTolerance(value)).toBe(true);
+  });
+
+  it('rejects tokens that are beyond clockToleranceMs', () => {
+    const clockToleranceMs = 1_000;
+    const isValidWithTolerance = isValidToken(secret, clockToleranceMs);
+    const value = createTokenValue(secret, ttlMs)(Date.now() - ttlMs - 2_000);
+
+    expect(isValidWithTolerance(value)).toBe(false);
+  });
+
   it('returns false when the signature does not match', () => {
     const expiresAt = String(Date.now() + ttlMs);
     const value = `${expiresAt}.${sign('wrong-secret')(expiresAt)}`;

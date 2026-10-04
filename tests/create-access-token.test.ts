@@ -40,4 +40,13 @@ describe('createAccessToken', () => {
 
     expect(verifier.isValid(issuer.create())).toBe(false);
   });
+
+  it('applies clockToleranceMs when validating', () => {
+    const ttlMs = 5_000;
+    const clockToleranceMs = 3_000;
+    const token = createAccessToken(secret, { ttlMs, clockToleranceMs });
+    const value = token.create(Date.now() - ttlMs - 1_000);
+
+    expect(token.isValid(value)).toBe(true);
+  });
 });

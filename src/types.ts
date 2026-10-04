@@ -1,5 +1,6 @@
 export interface AccessTokenOptions {
   ttlMs?: number;
+  clockToleranceMs?: number;
 }
 
 export interface AccessToken {
