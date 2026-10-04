@@ -1,9 +1,6 @@
 {
   "extends": "./tsconfig.node-build.json",
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "types": ["node"]
   },
   "include": ["src"]
