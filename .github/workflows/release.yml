@@ -26,7 +26,7 @@ jobs:
   release-notes:
     if: ${{ needs.bump.outputs.tag != '' }}
     needs: bump
-    uses: ./.github/workflows/create-release-notes.yml
+    uses: MaxiGarcia13/gh-actions/.github/workflows/create-release-notes.yml@main
     with:
       tag: ${{ needs.bump.outputs.tag }}
       default_branch: main
