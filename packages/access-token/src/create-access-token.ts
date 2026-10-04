@@ -13,7 +13,7 @@ const DEFAULT_CLOCK_TOLERANCE_MS = 0;
  * @param options.ttlMs - The time to live for the access token in milliseconds. Defaults to 1 hour.
  * @param options.clockToleranceMs - Allowed clock skew when checking expiry, in milliseconds. Defaults to 0.
  * @returns An object with the following properties:
- *  - create: A function that creates a token value. Accepts optional data and/or now.
+ *  - create: A function that creates a token value. Accepts optional `{ data, now }`.
  *  - isValid: A function that validates a token value.
  *  - decode: A function that parses a token without verifying it.
  */

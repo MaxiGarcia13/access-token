@@ -18,11 +18,7 @@ export interface DecodedAccessToken {
 }
 
 export interface AccessToken {
-  create: {
-    (now?: number): string;
-    (data: TokenData, now?: number): string;
-    (options: CreateTokenOptions): string;
-  };
+  create: (options?: CreateTokenOptions) => string;
   isValid: (value: string | undefined | null) => boolean;
   decode: (value: string | undefined | null) => DecodedAccessToken | null;
 }
