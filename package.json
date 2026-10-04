@@ -27,8 +27,8 @@
   ],
   "scripts": {
     "build": "nx run-many --target=build",
-    "dev:app": "nx run dev --projects=app",
-    "preview:app": "nx run preview --projects=app",
+    "dev:app": "nx run app:dev",
+    "preview:app": "nx run app:preview",
     "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
