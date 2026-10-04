@@ -7,6 +7,10 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   ci:
     if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'chore(release):')
