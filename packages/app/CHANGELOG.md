@@ -1,3 +1,19 @@
+## 0.2.0 (2026-10-04)
+
+### 🚀 Features
+
+- Initialize playground fields and enhance payload handling ([53974c7](https://github.com/MaxiGarcia13/access-token/commit/53974c7))
+
+### 🔄 Refactors
+
+- Update component styling and layout in playground ([b16f0ca](https://github.com/MaxiGarcia13/access-token/commit/b16f0ca))
+- Simplify import statements in playground component ([7b2d1f4](https://github.com/MaxiGarcia13/access-token/commit/7b2d1f4))
+- Enhance playground functionality and event handling ([97c644c](https://github.com/MaxiGarcia13/access-token/commit/97c644c))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.1 (2026-10-04)
 
 ### 🚀 Features
