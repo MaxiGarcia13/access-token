@@ -25,6 +25,8 @@ const { defaultData } = Astro.props;
     data-payload-input
     spellcheck="false"
     autocomplete="off"
-  >{JSON.stringify(defaultData, null, 2)}</textarea>
+  >
+    {JSON.stringify(defaultData, null, 2)}
+  </textarea>
   <p class="mt-2 text-[0.78rem] text-danger" data-payload-error hidden></p>
 </section>

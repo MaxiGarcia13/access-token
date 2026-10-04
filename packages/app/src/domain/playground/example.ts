@@ -5,4 +5,4 @@ export const examplePayload = {
 } as const;
 
 export const exampleSecret = 'playground-secret';
-export const exampleTtlMinutes = '60';
+export const exampleTtlMinutes = '5';
