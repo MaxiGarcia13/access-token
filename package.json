@@ -34,7 +34,8 @@
     "lint:fix": "eslint . --fix",
     "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
     "phoenix": "npm run clean && npm i && npm run build",
-    "bump-version": "nx release --yes --first-release"
+    "version:app": "nx release --projects=@maxigarcia/view-transitions-app --skip-publish",
+    "release:lib": "nx release --projects=@maxigarcia/view-transitions --yes"
   },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
