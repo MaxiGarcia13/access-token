@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "clean": "rm -rf node_modules package-lock.json .astro"
+    "clean": "rm -rf node_modules package-lock.json .astro dist .vercel"
   },
   "dependencies": {
     "@maxigarcia/access-token": "*",
