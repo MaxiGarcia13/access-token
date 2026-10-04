@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  ci:
+    if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'chore(release):')
+    uses: ./.github/workflows/validate.yml
+
+  bump:
+    uses: MaxiGarcia13/gh-actions/.github/workflows/bump-version.yml@main
+    secrets: inherit
+
+  publish:
+    if: ${{ needs.bump.outputs.tag != '' }}
+    uses: MaxiGarcia13/gh-actions/.github/workflows/npm-publish.yml@main
+    secrets: inherit
+    with:
+      command: publish:npm
+
+  release-notes:
+    if: ${{ needs.bump.outputs.tag != '' }}
+    needs: bump
+    uses: ./.github/workflows/create-release-notes.yml
+    with:
+      tag: ${{ needs.bump.outputs.tag }}
+      default_branch: main

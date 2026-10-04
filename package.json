@@ -34,7 +34,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "clean": "rm -rf dist node_modules",
-    "phoenix": "npm run clean && npm i && npm run build"
+    "phoenix": "npm run clean && npm i && npm run build",
+    "publish:npm": "npm run build && npm publish --access public"
   },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
