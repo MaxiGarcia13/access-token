@@ -49,9 +49,43 @@ jobs:
         run: git push && git push --tags
 
   release-notes:
+    needs: release
     permissions:
       contents: write
-    needs: release
-    uses: MaxiGarcia13/gh-actions/.github/workflows/create-release-notes.yml@main
-    with:
-      default_branch: main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - run: git pull && git pull --tags
+
+      - name: Get latest tag
+        id: tag
+        run: |
+          set -euo pipefail
+          latest_tag=$(git tag --sort=creatordate | tail -n 1)
+          echo "latest=$latest_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure release tag is available
+        run: |
+          set -euo pipefail
+          git fetch origin "refs/tags/${{ steps.tag.outputs.latest }}:refs/tags/${{ steps.tag.outputs.latest }}" 2>/dev/null || git fetch origin --tags --force
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.tag.outputs.latest }}"
+          if gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Release $TAG already exists, skipping."
+            exit 0
+          fi
+          gh release create "$TAG" \
+            --repo "${{ github.repository }}" \
+            --title "Release $TAG" \
+            --generate-notes \
+            --verify-tag
