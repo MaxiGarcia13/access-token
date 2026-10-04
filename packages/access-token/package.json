@@ -1,7 +1,7 @@
 {
   "name": "@maxigarcia/access-token",
   "type": "module",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Tiny signed access tokens for cookie-based API auth — HMAC expiry checks, no session store.",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
