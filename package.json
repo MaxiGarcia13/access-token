@@ -34,7 +34,7 @@
     "lint:fix": "eslint . --fix",
     "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
     "phoenix": "npm run clean && npm i && npm run build",
-    "version:app": "nx release --projects=app --skip-publish",
+    "version:app": "nx release --projects=app --skip-publish --first-release",
     "release:lib": "nx release --projects=@maxigarcia/access-token --skip-publish"
   },
   "devDependencies": {
