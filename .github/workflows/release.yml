@@ -18,8 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    outputs:
-      tag: ${{ steps.release_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +28,7 @@ jobs:
         with:
           cache: npm
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
 
       - run: npm ci
 
@@ -51,11 +49,9 @@ jobs:
         run: git push && git push --tags
 
   release-notes:
-    if: ${{ needs.release.outputs.tag != '' }}
     permissions:
       contents: write
     needs: release
     uses: MaxiGarcia13/gh-actions/.github/workflows/create-release-notes.yml@main
     with:
-      tag: ${{ needs.bump.outputs.tag }}
       default_branch: main
