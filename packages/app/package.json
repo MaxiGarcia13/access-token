@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "clean": "rm -rf node_modules package-lock.json .astro"
   },
   "dependencies": {
     "@maxigarcia/access-token": "*",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@astrojs/node": "^11.1.6",
+    "@astrojs/vercel": "^11.0.11",
     "@tailwindcss/vite": "^4.3.3",
     "tailwindcss": "^4.3.3"
   },
