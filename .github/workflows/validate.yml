@@ -4,21 +4,31 @@ on:
   workflow_call:
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci
+      - run: npm run build
+
   test:
+    needs: build
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - run: npm ci
-      - run: npm run build
       - run: npm run test
 
   lint:
+    needs: build
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - run: npm ci
       - run: npm run lint
