@@ -27,15 +27,15 @@
   ],
   "scripts": {
     "build": "nx run-many --target=build",
-    "dev:app": "nx run dev --project=app",
-    "preview:app": "nx run preview --project=app",
+    "dev:app": "nx run dev --projects=app",
+    "preview:app": "nx run preview --projects=app",
     "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
     "phoenix": "npm run clean && npm i && npm run build",
-    "version:app": "nx release --project=app --skip-publish",
-    "release:lib": "nx release --project=access-token --skip-publish"
+    "version:app": "nx release --projects=app --skip-publish",
+    "release:lib": "nx release --projects=@maxigarcia/access-token --skip-publish"
   },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
