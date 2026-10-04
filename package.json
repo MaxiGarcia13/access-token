@@ -35,7 +35,7 @@
     "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
     "phoenix": "npm run clean && npm i && npm run build",
     "version:app": "nx release --projects=@maxigarcia/view-transitions-app --skip-publish",
-    "release:lib": "nx release --projects=@maxigarcia/view-transitions --yes --skip-publish"
+    "release:lib": "nx release --projects=@maxigarcia/view-transitions --skip-publish"
   },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
