@@ -1,7 +1,5 @@
 export type TokenData = Record<string, unknown>;
 
-export type PlaygroundMode = 'encoder' | 'decoder';
-
 export type TokenApiSuccess
   = | {
     ok: true;

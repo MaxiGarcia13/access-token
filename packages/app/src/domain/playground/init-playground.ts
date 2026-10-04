@@ -1,15 +1,14 @@
-import type { PlaygroundMode, PreviewResult } from '../token/types';
-import { formatExpiresIn } from '@/utils/format-expires-in';
+import type { PreviewResult } from '../token/types';
 import { buildTokenHighlightHtml } from '@/utils/token-highlight';
 import { createToken, decodeToken, verifyToken } from '../token/api';
 import { parsePayloadJson } from '../token/parse-payload';
 import { minutesToTtlMs, secondsToToleranceMs } from '../token/ttl';
 import { examplePayload, exampleSecret, exampleTtlMinutes } from './example';
-import { playgroundHints } from './hints';
+import { setExpiresAtMs, startExpiresCountdown } from './expires-countdown';
+
+type SyncSource = 'payload' | 'token';
 
 export function initPlayground(root: HTMLElement) {
-  const modeButtons = root.querySelectorAll<HTMLButtonElement>('[data-mode]');
-  const hint = root.querySelector<HTMLElement>('[data-hint]')!;
   const tokenInput = root.querySelector<HTMLTextAreaElement>('[data-token-input]')!;
   const tokenHighlight = root.querySelector<HTMLElement>('[data-token-highlight]')!;
   const payloadInput = root.querySelector<HTMLTextAreaElement>('[data-payload-input]')!;
@@ -22,12 +21,13 @@ export function initPlayground(root: HTMLElement) {
   const previewBody = root.querySelector<HTMLElement>('[data-preview-body]')!;
   const expiresAtEl = root.querySelector<HTMLElement>('[data-expires-at]')!;
   const expiresInEl = root.querySelector<HTMLElement>('[data-expires-in]')!;
-  const signatureEl = root.querySelector<HTMLElement>('[data-signature]')!;
 
-  let mode: PlaygroundMode = 'encoder';
+  let source: SyncSource = 'payload';
   let debounceTimer: number | undefined;
   let requestId = 0;
   let syncing = false;
+
+  startExpiresCountdown(expiresInEl, statusEl);
 
   function renderTokenHighlight(token: string) {
     tokenHighlight.innerHTML = buildTokenHighlightHtml(token);
@@ -43,11 +43,16 @@ export function initPlayground(root: HTMLElement) {
   function updatePreview(result: PreviewResult) {
     const expiresAt = result.expiresAt ?? null;
     expiresAtEl.textContent = expiresAt ? new Date(expiresAt).toLocaleString() : '—';
-    expiresInEl.textContent = formatExpiresIn(expiresAt);
-    signatureEl.textContent = result.signature || '—';
+    setExpiresAtMs(expiresInEl, expiresAt, statusEl);
 
     if (result.error) {
       statusEl.textContent = result.error;
+      statusEl.dataset.state = 'error';
+      return;
+    }
+
+    if (expiresAt !== null && expiresAt <= Date.now()) {
+      statusEl.textContent = 'Expired';
       statusEl.dataset.state = 'error';
       return;
     }
@@ -69,17 +74,7 @@ export function initPlayground(root: HTMLElement) {
     return result;
   }
 
-  function setMode(next: PlaygroundMode) {
-    mode = next;
-    hint.textContent = playgroundHints[next];
-    modeButtons.forEach((button) => {
-      button.setAttribute('aria-pressed', String(button.dataset.mode === next));
-    });
-    root.dataset.mode = next;
-    scheduleSync();
-  }
-
-  async function syncFromEncoder() {
+  async function syncFromPayload() {
     const { data, error } = readPayload();
     if (error) {
       setPending(false);
@@ -144,13 +139,13 @@ export function initPlayground(root: HTMLElement) {
     }
   }
 
-  async function syncFromDecoder() {
+  async function syncFromToken() {
     const token = tokenInput.value.trim();
     renderTokenHighlight(token);
 
     if (!token) {
       setPending(false);
-      updatePreview({ error: 'Paste a token to decode' });
+      updatePreview({ error: 'Paste a token to inspect' });
       return;
     }
 
@@ -225,42 +220,33 @@ export function initPlayground(root: HTMLElement) {
     }
   }
 
-  function scheduleSync() {
+  function scheduleSync(nextSource: SyncSource = source) {
+    source = nextSource;
     window.clearTimeout(debounceTimer);
     setPending(true);
     debounceTimer = window.setTimeout(() => {
-      if (mode === 'encoder')
-        void syncFromEncoder();
-      else void syncFromDecoder();
+      if (source === 'payload')
+        void syncFromPayload();
+      else void syncFromToken();
     }, 280);
   }
-
-  modeButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      setMode(button.dataset.mode === 'decoder' ? 'decoder' : 'encoder');
-    });
-  });
 
   tokenInput.addEventListener('input', () => {
     if (syncing)
       return;
     renderTokenHighlight(tokenInput.value);
-    if (mode === 'encoder')
-      setMode('decoder');
-    else scheduleSync();
+    scheduleSync('token');
   });
 
   payloadInput.addEventListener('input', () => {
     if (syncing)
       return;
-    if (mode === 'decoder')
-      setMode('encoder');
-    else scheduleSync();
+    scheduleSync('payload');
   });
 
-  for (const input of [secretInput, ttlInput, toleranceInput]) {
-    input.addEventListener('input', () => scheduleSync());
-  }
+  secretInput.addEventListener('input', () => scheduleSync());
+  ttlInput.addEventListener('input', () => scheduleSync('payload'));
+  toleranceInput.addEventListener('input', () => scheduleSync());
 
   root.querySelector('[data-copy-token]')?.addEventListener('click', async () => {
     if (!tokenInput.value)
@@ -275,9 +261,14 @@ export function initPlayground(root: HTMLElement) {
   });
 
   root.querySelector('[data-clear-token]')?.addEventListener('click', () => {
+    syncing = true;
     tokenInput.value = '';
     renderTokenHighlight('');
-    setMode('decoder');
+    payloadInput.value = '{}';
+    payloadError.hidden = true;
+    payloadError.textContent = '';
+    syncing = false;
+    scheduleSync('token');
   });
 
   root.querySelector('[data-generate-example]')?.addEventListener('click', () => {
@@ -286,7 +277,7 @@ export function initPlayground(root: HTMLElement) {
     secretInput.value = exampleSecret;
     ttlInput.value = exampleTtlMinutes;
     syncing = false;
-    setMode('encoder');
+    scheduleSync('payload');
   });
 
   tokenInput.addEventListener('scroll', () => {
@@ -294,5 +285,5 @@ export function initPlayground(root: HTMLElement) {
     tokenHighlight.scrollLeft = tokenInput.scrollLeft;
   });
 
-  setMode('encoder');
+  scheduleSync('payload');
 }

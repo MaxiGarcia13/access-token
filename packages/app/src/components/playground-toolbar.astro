@@ -1,32 +1,14 @@
 <div
-  class="mb-5 grid animate-rise-delayed grid-cols-1 items-center gap-4 max-[860px]:grid-cols-1 min-[861px]:grid-cols-[auto_1fr_auto]"
+	class="mb-5 flex animate-rise-delayed flex-col gap-3 min-[861px]:flex-row min-[861px]:items-center min-[861px]:justify-between"
 >
-  <div class="inline-flex rounded-full border border-line bg-bg-1/85 p-1" role="tablist" aria-label="Playground mode">
-    <button
-      type="button"
-      class="cursor-pointer rounded-full border-0 bg-transparent px-4 py-2.5 text-muted transition-[background,color,transform] duration-150 aria-pressed:bg-brand aria-pressed:font-semibold aria-pressed:text-brand-ink hover:aria-[pressed=false]:text-text"
-      data-mode="encoder"
-      aria-pressed="true"
-    >
-      Encoder
-    </button>
-    <button
-      type="button"
-      class="cursor-pointer rounded-full border-0 bg-transparent px-4 py-2.5 text-muted transition-[background,color,transform] duration-150 aria-pressed:bg-brand aria-pressed:font-semibold aria-pressed:text-brand-ink hover:aria-[pressed=false]:text-text"
-      data-mode="decoder"
-      aria-pressed="false"
-    >
-      Decoder
-    </button>
-  </div>
-  <p class="m-0 text-[0.82rem] text-muted" data-hint>
-    Edit the payload and secret, then watch the signed token update in realtime.
-  </p>
-  <button
-    type="button"
-    class="cursor-pointer border-0 bg-transparent text-accent underline underline-offset-2"
-    data-generate-example
-  >
-    Generate example
-  </button>
+	<p class="m-0 text-[0.82rem] text-muted">
+		Edit the payload or paste a token — everything stays in sync in realtime.
+	</p>
+	<button
+		type="button"
+		class="cursor-pointer self-start border-0 bg-transparent text-accent underline underline-offset-2"
+		data-generate-example
+	>
+		Generate example
+	</button>
 </div>

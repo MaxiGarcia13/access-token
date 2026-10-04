@@ -1,3 +1,7 @@
+---
+import ExpiresIn from './expires-in.astro';
+---
+
 <section class="rounded-panel border border-line bg-bg-1/78 p-4 shadow-panel backdrop-blur-[10px]">
 	<div class="mb-3 flex items-center justify-between gap-3">
 		<h2 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Verification</h2>
@@ -15,10 +19,6 @@
 			>
 			</div>
 			<div class="h-3.5 animate-shimmer rounded-lg bg-linear-to-r from-bg-2 via-bg-3 to-bg-2 bg-size-[200%_100%]"></div>
-			<div
-				class="h-3.5 w-[45%] animate-shimmer rounded-lg bg-linear-to-r from-bg-2 via-bg-3 to-bg-2 bg-size-[200%_100%]"
-			>
-			</div>
 		</div>
 		<div data-preview-body>
 			<dl class="grid gap-2.5">
@@ -26,14 +26,7 @@
 					<dt class="m-0 text-xs text-muted">Expires at</dt>
 					<dd class="m-0 text-[0.82rem]" data-expires-at>—</dd>
 				</div>
-				<div class="grid grid-cols-[7.5rem_1fr] items-baseline gap-3">
-					<dt class="m-0 text-xs text-muted">Expires in</dt>
-					<dd class="m-0 text-[0.82rem]" data-expires-in>—</dd>
-				</div>
-				<div class="grid grid-cols-[7.5rem_1fr] items-baseline gap-3">
-					<dt class="m-0 text-xs text-muted">Signature</dt>
-					<dd class="m-0 truncate font-mono text-[0.82rem]" data-signature>—</dd>
-				</div>
+				<ExpiresIn />
 			</dl>
 		</div>
 	</div>
