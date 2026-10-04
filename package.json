@@ -36,12 +36,10 @@
     "clean": "rm -rf dist node_modules",
     "phoenix": "npm run clean && npm i && npm run build"
   },
-  "dependencies": {
-    "typescript": "^6.0.3"
-  },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
     "@types/node": "^26.6.4",
+    "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   }
 }
