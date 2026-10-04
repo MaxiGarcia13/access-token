@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { createSessionValue } from '../src/create-session-value.js';
+import { createTokenValue } from '../src/create-token-value.js';
 import { sign } from '../src/sign.js';
 
-describe('createSessionValue', () => {
+describe('createTokenValue', () => {
   const secret = 'test-secret';
   const ttlMs = 60_000;
 
@@ -12,12 +12,12 @@ describe('createSessionValue', () => {
     const expiresAt = String(now + ttlMs);
     const expected = `${expiresAt}.${sign(secret)(expiresAt)}`;
 
-    expect(createSessionValue(secret, ttlMs)(now)).toBe(expected);
+    expect(createTokenValue(secret, ttlMs)(now)).toBe(expected);
   });
 
   it('defaults now to Date.now()', () => {
     const before = Date.now();
-    const value = createSessionValue(secret, ttlMs)();
+    const value = createTokenValue(secret, ttlMs)();
     const after = Date.now();
 
     const [expiresAt, signature] = value.split('.');

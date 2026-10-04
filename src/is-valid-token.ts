@@ -1,7 +1,7 @@
 import { safeEqual } from './safe-equal.js';
 import { sign } from './sign.js';
 
-export function isValidSession(secret: string) {
+export function isValidToken(secret: string) {
   return (value: string | undefined | null) => {
     if (!value) {
       return false;

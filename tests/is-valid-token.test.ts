@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
-import { createSessionValue } from '../src/create-session-value.js';
-import { isValidSession } from '../src/is-valid-session.js';
+import { createTokenValue } from '../src/create-token-value.js';
+import { isValidToken } from '../src/is-valid-token.js';
 import { sign } from '../src/sign.js';
 
-describe('isValidSession', () => {
+describe('isValidToken', () => {
   const secret = 'test-secret';
   const ttlMs = 60_000;
-  const isValid = isValidSession(secret);
+  const isValid = isValidToken(secret);
 
-  it('returns true for a freshly created session', () => {
-    const value = createSessionValue(secret, ttlMs)();
+  it('returns true for a freshly created token', () => {
+    const value = createTokenValue(secret, ttlMs)();
 
     expect(isValid(value)).toBe(true);
   });
@@ -26,9 +26,9 @@ describe('isValidSession', () => {
     expect(isValid('1234567890.')).toBe(false);
   });
 
-  it('returns false when the session has expired', () => {
+  it('returns false when the token has expired', () => {
     const past = Date.now() - ttlMs - 1;
-    const value = createSessionValue(secret, ttlMs)(past);
+    const value = createTokenValue(secret, ttlMs)(past);
 
     expect(isValid(value)).toBe(false);
   });
@@ -41,7 +41,7 @@ describe('isValidSession', () => {
   });
 
   it('returns false when the signature is tampered with', () => {
-    const value = createSessionValue(secret, ttlMs)();
+    const value = createTokenValue(secret, ttlMs)();
     const [expiresAt, signature] = value.split('.');
     const tampered = `${expiresAt}.${signature!.slice(0, -1)}x`;
 
