@@ -2,6 +2,7 @@ import type { SyncSource } from './sync';
 import { bindPlaygroundEvents, createScheduler } from './bind-events';
 import { getPlaygroundElements } from './elements';
 import { startExpiresCountdown } from './expires-countdown';
+import { initializePlaygroundFields } from './initialize-fields';
 import { syncFromPayload, syncFromToken } from './sync';
 import { createVerificationView } from './verification-view';
 
@@ -12,6 +13,7 @@ export function initPlayground(root: HTMLElement) {
   let requestId = 0;
   let syncing = false;
 
+  initializePlaygroundFields(els);
   startExpiresCountdown(els.expiresInEl, els.statusEl);
 
   const syncOptions = {

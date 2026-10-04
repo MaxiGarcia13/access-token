@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { defaultData } = Astro.props;
+const initialPayload = JSON.stringify(defaultData);
 ---
 
 <section class="rounded-panel border border-line bg-bg-1/78 p-4 shadow-panel backdrop-blur-[10px]">
@@ -23,10 +24,10 @@ const { defaultData } = Astro.props;
     id="payload-input"
     class="min-h-40 w-full resize-y rounded-field border border-line bg-ink p-3.5 leading-normal text-text"
     data-payload-input
+    data-initial={initialPayload}
     spellcheck="false"
     autocomplete="off"
   >
-    {JSON.stringify(defaultData, null, 2)}
   </textarea>
   <p class="mt-2 text-[0.78rem] text-danger" data-payload-error hidden></p>
 </section>
