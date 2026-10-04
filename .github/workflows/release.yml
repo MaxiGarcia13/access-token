@@ -17,10 +17,12 @@ jobs:
     uses: ./.github/workflows/validate.yml
 
   bump:
+    needs: ci
     uses: MaxiGarcia13/gh-actions/.github/workflows/bump-version.yml@main
     secrets: inherit
 
   publish:
+    needs: bump
     if: ${{ needs.bump.outputs.tag != '' }}
     uses: MaxiGarcia13/gh-actions/.github/workflows/npm-publish.yml@main
     secrets: inherit
