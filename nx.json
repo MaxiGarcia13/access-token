@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "main",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "lint": {
+      "cache": true
+    },
+    "dev": {
+      "continuous": true
+    }
+  },
+  "release": {
+    "projects": [
+      "packages/access-token"
+    ],
+    "projectsRelationship": "independent",
+    "releaseTag": {
+      "pattern": "{projectName}@{version}"
+    },
+    "conventionalCommits": {
+      "types": {
+        "feat": { "semverBump": "minor", "changelog": { "title": "🚀 Features" } },
+        "fix": { "semverBump": "patch", "changelog": { "title": "🐞 Fixes" } },
+        "refactor": { "semverBump": "patch", "changelog": { "title": "🔄 Refactors" } },
+        "perf": { "semverBump": "patch", "changelog": { "title": "🚀 Performance" } },
+        "chore": { "semverBump": "patch", "changelog": { "title": "🧹 Chores" } },
+        "style": { "semverBump": "patch", "changelog": { "title": "🎨 Styles" } },
+        "build": { "semverBump": "patch", "changelog": { "title": "👷 Build" } },
+        "deps": { "semverBump": "patch", "changelog": { "title": "🔧 Dependencies" } },
+        "breaking": { "semverBump": "major", "changelog": { "title": "💥 Breaking Changes" } },
+        "docs": { "semverBump": "none", "changelog": { "title": "📚 Documentation" } },
+        "test": { "semverBump": "none", "changelog": { "title": "🧪 Tests" } },
+        "ci": { "semverBump": "none", "changelog": { "title": "🤖 CI/CD" } },
+        "config": { "semverBump": "none", "changelog": { "title": "🔧 Configuration" } }
+      }
+    },
+    "version": {
+      "conventionalCommits": true,
+      "preVersionCommand": "npm run build",
+      "adjustSemverBumpsForZeroMajorVersion": false
+    },
+    "changelog": {
+      "workspaceChangelog": false,
+      "projectChangelogs": true
+    },
+    "git": {
+      "commit": true,
+      "tag": true,
+      "commitMessage": "chore(release): version packages"
+    }
+  },
+  "analytics": false
+}
