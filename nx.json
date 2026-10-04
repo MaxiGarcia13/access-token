@@ -16,7 +16,8 @@
   },
   "release": {
     "projects": [
-      "packages/access-token"
+      "packages/access-token",
+      "packages/app"
     ],
     "projectsRelationship": "independent",
     "releaseTag": {
