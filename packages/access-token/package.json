@@ -1,0 +1,46 @@
+{
+  "name": "@maxigarcia/access-token",
+  "type": "module",
+  "version": "0.6.0",
+  "description": "Tiny signed access tokens for cookie-based API auth — HMAC expiry checks, no session store.",
+  "author": "Maximiliano Garcia Mortigliengo",
+  "license": "ISC",
+  "homepage": "https://github.com/MaxiGarcia13/access-token#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaxiGarcia13/access-token.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MaxiGarcia13/access-token/issues"
+  },
+  "keywords": [
+    "access",
+    "token",
+    "authentication",
+    "authorization",
+    "auth",
+    "api",
+    "cookie"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist node_modules"
+  }
+}
