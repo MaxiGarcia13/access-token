@@ -7,31 +7,49 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-permissions:
-  contents: write
-  packages: write
-
 jobs:
   ci:
     if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'chore(release):')
     uses: ./.github/workflows/validate.yml
 
-  bump:
+  release:
     needs: ci
-    uses: MaxiGarcia13/gh-actions/.github/workflows/bump-version.yml@main
-    secrets: inherit
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.release_tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
 
-  publish:
-    needs: bump
-    if: ${{ needs.bump.outputs.tag != '' }}
-    uses: MaxiGarcia13/gh-actions/.github/workflows/npm-publish.yml@main
-    secrets: inherit
-    with:
-      command: publish:npm
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Configure git author
+        uses: MaxiGarcia13/gh-actions/.github/actions/configure-git-author@main
+
+      - name: Bump package version
+        run: npm run bump-version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push commit and tags
+        run: git push && git push --tags
 
   release-notes:
-    if: ${{ needs.bump.outputs.tag != '' }}
-    needs: bump
+    if: ${{ needs.release.outputs.tag != '' }}
+    needs: release
     uses: MaxiGarcia13/gh-actions/.github/workflows/create-release-notes.yml@main
     with:
       tag: ${{ needs.bump.outputs.tag }}
