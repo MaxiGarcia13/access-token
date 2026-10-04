@@ -3,8 +3,8 @@ import EncodedTokenPanel from './encoded-token-panel.astro';
 import PayloadPanel from './payload-panel.astro';
 import PlaygroundHero from './playground-hero.astro';
 import PlaygroundToolbar from './playground-toolbar.astro';
-import PreviewPanel from './preview-panel.astro';
 import SigningPanel from './signing-panel.astro';
+import VerificationPanel from './verification-panel.astro';
 
 const defaultSecret = 'playground-secret';
 const defaultTtlMinutes = 60;
@@ -22,8 +22,8 @@ const defaultData = {
     <EncodedTokenPanel />
 
     <div class="grid gap-4">
+      <VerificationPanel />
       <PayloadPanel defaultData={defaultData} />
-      <PreviewPanel defaultData={defaultData} />
       <SigningPanel defaultSecret={defaultSecret} defaultTtlMinutes={defaultTtlMinutes} />
     </div>
   </div>

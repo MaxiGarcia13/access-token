@@ -23,7 +23,6 @@ export function initPlayground(root: HTMLElement) {
   const expiresAtEl = root.querySelector<HTMLElement>('[data-expires-at]')!;
   const expiresInEl = root.querySelector<HTMLElement>('[data-expires-in]')!;
   const signatureEl = root.querySelector<HTMLElement>('[data-signature]')!;
-  const payloadPreview = root.querySelector<HTMLElement>('[data-payload-preview]')!;
 
   let mode: PlaygroundMode = 'encoder';
   let debounceTimer: number | undefined;
@@ -46,7 +45,6 @@ export function initPlayground(root: HTMLElement) {
     expiresAtEl.textContent = expiresAt ? new Date(expiresAt).toLocaleString() : '—';
     expiresInEl.textContent = formatExpiresIn(expiresAt);
     signatureEl.textContent = result.signature || '—';
-    payloadPreview.textContent = JSON.stringify(result.data ?? {}, null, 2);
 
     if (result.error) {
       statusEl.textContent = result.error;
