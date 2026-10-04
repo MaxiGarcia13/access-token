@@ -31,7 +31,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
