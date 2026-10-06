@@ -59,33 +59,70 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
+          token: ${{ secrets.GH_TOKEN }}
 
-      - run: git pull && git pull --tags
-
-      - name: Get latest tag
-        id: tag
-        run: |
-          set -euo pipefail
-          latest_tag=$(git tag --sort=creatordate | tail -n 1)
-          echo "latest=$latest_tag" >> "$GITHUB_OUTPUT"
-
-      - name: Ensure release tag is available
-        run: |
-          set -euo pipefail
-          git fetch origin "refs/tags/${{ steps.tag.outputs.latest }}:refs/tags/${{ steps.tag.outputs.latest }}" 2>/dev/null || git fetch origin --tags --force
-
-      - name: Create GitHub Release
+      - name: Create GitHub Releases from changelogs
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           set -euo pipefail
-          TAG="${{ steps.tag.outputs.latest }}"
-          if gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            echo "Release $TAG already exists, skipping."
-            exit 0
+          git fetch --tags --force
+
+          changelog_for() {
+            case "$1" in
+              '@maxigarcia/access-token') echo 'packages/access-token/CHANGELOG.md' ;;
+              'app') echo 'packages/app/CHANGELOG.md' ;;
+              *) return 1 ;;
+            esac
+          }
+
+          extract_section() {
+            local file="$1" version="$2"
+            awk -v ver="$version" '
+              $0 ~ "^## " ver "( |$)" {found=1; print; next}
+              found && /^## / {exit}
+              found {print}
+            ' "$file"
+          }
+
+          release_commit=$(git log -1 --grep='^chore(release):' --format='%H' || true)
+          tags=""
+          if [ -n "${release_commit:-}" ]; then
+            tags=$(git tag --points-at "$release_commit" | grep '@' || true)
           fi
-          gh release create "$TAG" \
-            --repo "${{ github.repository }}" \
-            --title "Release $TAG" \
-            --generate-notes \
-            --verify-tag
+
+          if [ -z "$tags" ]; then
+            tags=$(git tag -l '*@*' --sort=creatordate)
+          fi
+
+          for tag in $tags; do
+            if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+              echo "Release $tag already exists, skipping."
+              continue
+            fi
+
+            project="${tag%@*}"
+            version="${tag##*@}"
+            if ! changelog=$(changelog_for "$project"); then
+              echo "No changelog mapping for $project, skipping $tag"
+              continue
+            fi
+
+            notes=$(extract_section "$changelog" "$version")
+            if [ -z "$notes" ]; then
+              echo "No changelog section for $tag in $changelog, skipping."
+              continue
+            fi
+
+            notes_file=$(mktemp)
+            printf '%s\n' "$notes" > "$notes_file"
+
+            gh release create "$tag" \
+              --repo "${{ github.repository }}" \
+              --title "$tag" \
+              --notes-file "$notes_file" \
+              --verify-tag
+
+            rm -f "$notes_file"
+            echo "Created release $tag"
+          done
