@@ -45,19 +45,17 @@ const decoded = tokenManager.decode(withData);
 
 ### Standalone helpers
 
-You can also use `decodeToken` and `createTokenValidator` directly — useful when you only need to parse or verify, without creating a manager.
+You can also use `decodeToken` and `isValidToken` directly — useful when you only need to parse or verify, without creating a manager.
 
 ```ts
-import { createTokenValidator, decodeToken } from '@maxigarcia/access-token';
+import { decodeToken, isValidToken } from '@maxigarcia/access-token';
 
 // Parse without verifying signature or expiry
 const decoded = decodeToken(value);
 // { expiresAt, data, signature, signedPayload } | null
 
-// Build a validator (HMAC + expiry check)
-const isValid = createTokenValidator(process.env.ACCESS_TOKEN_SECRET!, 5 * 60 * 1000);
-
-if (!isValid(value)) {
+// One-shot check (HMAC + expiry)
+if (!isValidToken(process.env.ACCESS_TOKEN_SECRET!, value, 5 * 60 * 1000)) {
   throw new Error('Unauthorized');
 }
 ```
