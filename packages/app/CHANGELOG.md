@@ -1,3 +1,18 @@
+## 0.3.0 (2026-10-06)
+
+### 🚀 Features
+
+- Introduce CodePanel component for code display and copying functionality ([b9ffa16](https://github.com/MaxiGarcia13/access-token/commit/b9ffa16))
+
+### 🔄 Refactors
+
+- Simplify CodePanel usage in usage-example.astro ([8bbcf65](https://github.com/MaxiGarcia13/access-token/commit/8bbcf65))
+- Introduce reusable Panel and Button components for UI consistency ([8249ef9](https://github.com/MaxiGarcia13/access-token/commit/8249ef9))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.2.2 (2026-10-06)
 
 ### 💥 Breaking Changes
