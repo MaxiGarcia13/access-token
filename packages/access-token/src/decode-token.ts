@@ -18,6 +18,8 @@ function parsePayload(payload: string): TokenData | null {
 
 /**
  * Parses a token without verifying its signature or expiry.
+ * @param value - The token value to decode.
+ * @returns The decoded token, or null if the token is invalid.
  */
 export function decodeToken(value: string | undefined | null): DecodedAccessToken | null {
   if (!value) {
