@@ -14,7 +14,7 @@ jobs:
 
   publish:
     needs: ci
-    name: Release
+    name: Publish Packages
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -50,4 +50,8 @@ jobs:
 
   release-notes:
     needs: publish
+    name: Release Notes
+    permissions:
+      contents: write
     uses: ./.github/workflows/release-notes.yml
+    secrets: inherit
