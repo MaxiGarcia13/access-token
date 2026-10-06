@@ -1,28 +1,15 @@
-<section class="rounded-panel border border-line bg-bg-1/78 p-5 shadow-panel backdrop-blur-[10px]">
-  <div class="mb-4 flex items-center justify-between gap-3">
-    <h2 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Encoded token</h2>
-    <div class="flex gap-1.5">
-      <button
-        type="button"
-        class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
-        data-copy-token
-        title="Copy token"
-      >
-        Copy
-      </button>
-      <button
-        type="button"
-        class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
-        data-clear-token
-        title="Clear token"
-      >
-        Clear
-      </button>
-    </div>
+---
+import FieldLabel from './field-label.astro';
+import Panel from './panel.astro';
+import PanelButton from './panel-button.astro';
+---
+
+<Panel title="Encoded token">
+  <div slot="actions" class="flex gap-1.5">
+    <PanelButton data-copy-token title="Copy token">Copy</PanelButton>
+    <PanelButton data-clear-token title="Clear token">Clear</PanelButton>
   </div>
-  <label class="mb-2 block text-[0.72rem] tracking-wide text-muted uppercase" for="token-input">
-    expiresAt · payload · signature
-  </label>
+  <FieldLabel for="token-input">expiresAt · payload · signature</FieldLabel>
   <div class="relative min-h-56 min-[861px]:min-h-[22rem]">
     <pre
       class="pointer-events-none absolute inset-0 m-0 overflow-auto rounded-field border border-line bg-ink p-4 text-[0.86rem] leading-relaxed break-all whitespace-pre-wrap text-transparent"
@@ -39,4 +26,4 @@
     >
     </textarea>
   </div>
-</section>
+</Panel>

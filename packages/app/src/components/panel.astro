@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  as?: 'section' | 'article';
+  heading?: 'h2' | 'h3';
+}
+
+const { title, as: Tag = 'section', heading: Heading = 'h2' } = Astro.props;
+---
+
+<Tag class="rounded-panel border border-line bg-bg-1/78 p-5 shadow-panel backdrop-blur-[10px]">
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <Heading class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">{title}</Heading>
+    <slot name="actions" />
+  </div>
+  <slot />
+</Tag>

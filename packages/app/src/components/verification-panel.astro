@@ -1,17 +1,16 @@
 ---
 import ExpiresIn from './expires-in.astro';
+import Panel from './panel.astro';
 ---
 
-<section class="rounded-panel border border-line bg-bg-1/78 p-5 shadow-panel backdrop-blur-[10px]">
-  <div class="mb-4 flex items-center justify-between gap-3">
-    <h2 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Verification</h2>
-    <span
-      class="rounded-full border border-line px-2.5 py-1 text-xs text-muted data-[state=error]:border-danger/35 data-[state=error]:text-danger data-[state=ok]:border-ok/35 data-[state=ok]:text-ok data-[state=pending]:border-warn/35 data-[state=pending]:text-warn"
-      data-status
-    >
-      Idle
-    </span>
-  </div>
+<Panel title="Verification">
+  <span
+    slot="actions"
+    class="rounded-full border border-line px-2.5 py-1 text-xs text-muted data-[state=error]:border-danger/35 data-[state=error]:text-danger data-[state=ok]:border-ok/35 data-[state=ok]:text-ok data-[state=pending]:border-warn/35 data-[state=pending]:text-warn"
+    data-status
+  >
+    Idle
+  </span>
   <div class="min-h-28" data-preview>
     <div class="grid gap-2.5 pt-1 hidden" data-skeleton>
       <div class="h-5 w-[70%] animate-shimmer rounded-lg bg-linear-to-r from-bg-2 via-bg-3 to-bg-2 bg-size-[200%_100%]">
@@ -28,4 +27,4 @@ import ExpiresIn from './expires-in.astro';
       </dl>
     </div>
   </div>
-</section>
+</Panel>

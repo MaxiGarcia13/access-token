@@ -1,4 +1,8 @@
 ---
+import FieldLabel from './field-label.astro';
+import Panel from './panel.astro';
+import PanelButton from './panel-button.astro';
+
 interface Props {
   defaultData: Record<string, unknown>;
 }
@@ -7,19 +11,9 @@ const { defaultData } = Astro.props;
 const initialPayload = JSON.stringify(defaultData);
 ---
 
-<section class="rounded-panel border border-line bg-bg-1/78 p-5 shadow-panel backdrop-blur-[10px]">
-  <div class="mb-4 flex items-center justify-between gap-3">
-    <h2 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Payload</h2>
-    <button
-      type="button"
-      class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
-      data-copy-payload
-      title="Copy payload"
-    >
-      Copy
-    </button>
-  </div>
-  <label class="mb-2 block text-[0.72rem] tracking-wide text-muted uppercase" for="payload-input">JSON claims</label>
+<Panel title="Payload">
+  <PanelButton slot="actions" data-copy-payload title="Copy payload">Copy</PanelButton>
+  <FieldLabel for="payload-input">JSON claims</FieldLabel>
   <textarea
     id="payload-input"
     class="min-h-40 w-full resize-y rounded-field border border-line bg-ink p-3.5 leading-normal text-text"
@@ -30,4 +24,4 @@ const initialPayload = JSON.stringify(defaultData);
   >
   </textarea>
   <p class="mt-2 text-[0.78rem] text-danger" data-payload-error hidden></p>
-</section>
+</Panel>
