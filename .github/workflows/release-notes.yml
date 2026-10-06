@@ -12,19 +12,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          # Publish pushes release commits after this workflow started; use main tip.
+          ref: main
           fetch-depth: 0
           fetch-tags: true
           token: ${{ secrets.GH_TOKEN }}
 
-      - name: Pull latest tags
-        run: git fetch --tags --force
+      - name: Sync main and tags
+        run: |
+          set -euo pipefail
+          git fetch origin main --tags --force
+          git checkout -B main origin/main
 
       - name: Create GitHub Releases from changelogs
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           set -euo pipefail
-          git fetch --tags --force
 
           changelog_for() {
             case "$1" in
@@ -43,14 +47,18 @@ jobs:
             ' "$file"
           }
 
-          release_commit=$(git log -1 --grep='^chore(release):' --format='%H' || true)
-          tags=""
-          if [ -n "${release_commit:-}" ]; then
-            tags=$(git tag --points-at "$release_commit" | grep '@' || true)
-          fi
+          # Collect tags from every release commit on main (lib + app may be separate commits).
+          tags=$(
+            git log origin/main --grep='^chore(release):' --format='%H' |
+              while read -r commit; do
+                git tag --points-at "$commit" | grep '@' || true
+              done |
+              sort -u
+          )
 
           if [ -z "$tags" ]; then
-            tags=$(git tag -l '*@*' --sort=creatordate)
+            echo "No package tags found on release commits."
+            exit 0
           fi
 
           for tag in $tags; do
@@ -66,7 +74,12 @@ jobs:
               continue
             fi
 
-            notes=$(extract_section "$changelog" "$version")
+            # Read changelog from the tagged commit so notes match that release.
+            changelog_file=$(mktemp)
+            git show "$tag:$changelog" > "$changelog_file"
+            notes=$(extract_section "$changelog_file" "$version")
+            rm -f "$changelog_file"
+
             if [ -z "$notes" ]; then
               echo "No changelog section for $tag in $changelog, skipping."
               continue
