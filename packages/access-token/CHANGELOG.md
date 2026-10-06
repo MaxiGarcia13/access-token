@@ -1,3 +1,13 @@
+## 1.0.1 (2026-10-06)
+
+### 🔄 Refactors
+
+- Enhance JSDoc comments for token handling functions ([723b8bb](https://github.com/MaxiGarcia13/access-token/commit/723b8bb))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 # 1.0.0 (2026-10-06)
 
 ### 📚 Documentation

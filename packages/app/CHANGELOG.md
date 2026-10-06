@@ -1,3 +1,9 @@
+## 0.3.1 (2026-10-06)
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/access-token to 1.0.1
+
 ## 0.3.0 (2026-10-06)
 
 ### 🚀 Features
