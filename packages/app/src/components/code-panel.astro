@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  code: string;
+  copyTitle: string;
+  codeClass?: string;
+}
+
+const { title, code, copyTitle, codeClass = 'text-part-signature' } = Astro.props;
+---
+
+<article class="rounded-panel border border-line bg-bg-1/78 p-5 shadow-panel backdrop-blur-[10px]">
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <h3 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">{title}</h3>
+    <button
+      type="button"
+      class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
+      data-copy-code
+      title={copyTitle}
+    >
+      Copy
+    </button>
+  </div>
+  <pre
+    class:list={[
+      'm-0 overflow-x-auto rounded-field border border-line bg-ink p-3.5 text-[0.82rem] leading-relaxed',
+      codeClass,
+    ]}
+    data-code-block><code>{code}</code></pre>
+</article>
