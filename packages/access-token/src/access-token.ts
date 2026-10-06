@@ -17,7 +17,7 @@ const DEFAULT_CLOCK_TOLERANCE_MS = 0;
  *  - isValid: A function that validates a token value.
  *  - decode: A function that parses a token without verifying it.
  */
-export function createAccessToken(
+export function accessToken(
   secret: string,
   options: AccessTokenOptions = {},
 ): AccessToken {

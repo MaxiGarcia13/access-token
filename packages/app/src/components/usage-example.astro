@@ -1,29 +1,42 @@
 ---
 const installCommand = 'npm install @maxigarcia/access-token';
 
-const usageExample = `import { createAccessToken, decodeToken } from '@maxigarcia/access-token';
+const usageExample = `import { accessToken } from '@maxigarcia/access-token';
 
-const accessToken = createAccessToken(process.env.ACCESS_TOKEN_SECRET!, {
+const tokenManager = accessToken(process.env.ACCESS_TOKEN_SECRET!, {
   ttlMs: 10 * 60 * 1000, // 10 minutes
   clockToleranceMs: 5 * 60 * 1000, // 5 minutes
 });
 
 // Issue a token (e.g. set as a cookie after a successful challenge)
-const value = accessToken.create();
+const value = tokenManager.create();
 
 // Optional custom claims
-const withData = accessToken.create({
+const withData = tokenManager.create({
   data: { sub: 'user-1', scope: 'read' },
 });
 
 // Verify on protected routes
-if (!accessToken.isValid(value)) {
+if (!tokenManager.isValid(value)) {
   throw new Error('Unauthorized');
 }
 
 // Inspect without verifying
-const decoded = decodeToken(withData);
+const decoded = tokenManager.decode(withData);
 // { expiresAt, data, signature, signedPayload }`;
+
+const standaloneExample = `import { decodeToken, isValidToken } from '@maxigarcia/access-token';
+
+// Parse without verifying signature or expiry
+const decoded = decodeToken(value);
+// { expiresAt, data, signature, signedPayload } | null
+
+// Build a validator (HMAC + expiry check)
+const isValid = isValidToken(process.env.ACCESS_TOKEN_SECRET!, 5 * 60 * 1000);
+
+if (!isValid(value)) {
+  throw new Error('Unauthorized');
+}`;
 ---
 
 <section class="mt-16 border-t border-line pt-14" data-usage-example>
@@ -67,6 +80,23 @@ const decoded = decodeToken(withData);
       <pre
         class="m-0 overflow-x-auto rounded-field border border-line bg-ink p-3.5 text-[0.82rem] leading-relaxed text-part-payload"
         data-code-block><code>{usageExample}</code></pre>
+    </article>
+
+    <article class="rounded-panel border border-line bg-bg-1/78 p-5 shadow-panel backdrop-blur-[10px]">
+      <div class="mb-4 flex items-center justify-between gap-3">
+        <h3 class="m-0 font-display text-[1.05rem] tracking-[-0.02em]">Standalone helpers</h3>
+        <button
+          type="button"
+          class="cursor-pointer rounded-full border border-line bg-bg-2 px-2.5 py-1 text-muted hover:border-brand/35 hover:text-text"
+          data-copy-code
+          title="Copy standalone helpers example"
+        >
+          Copy
+        </button>
+      </div>
+      <pre
+        class="m-0 overflow-x-auto rounded-field border border-line bg-ink p-3.5 text-[0.82rem] leading-relaxed text-part-signature"
+        data-code-block><code>{standaloneExample}</code></pre>
     </article>
   </div>
 </section>

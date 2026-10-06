@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { createAccessToken } from '../src/create-access-token.js';
+import { accessToken } from '../src/access-token.js';
 
-describe('createAccessToken', () => {
+describe('accessToken', () => {
   const secret = 'test-secret';
 
   it('exposes create, isValid, and decode', () => {
-    const token = createAccessToken(secret);
+    const tokenManager = accessToken(secret);
 
-    expect(token).toEqual(
+    expect(tokenManager).toEqual(
       expect.objectContaining({
         create: expect.any(Function),
         isValid: expect.any(Function),
@@ -18,26 +18,26 @@ describe('createAccessToken', () => {
   });
 
   it('creates a valid token with the default ttl', () => {
-    const token = createAccessToken(secret);
-    const value = token.create();
+    const tokenManager = accessToken(secret);
+    const value = tokenManager.create();
 
-    expect(token.isValid(value)).toBe(true);
+    expect(tokenManager.isValid(value)).toBe(true);
   });
 
   it('uses a custom ttlMs when creating token values', () => {
     const ttlMs = 5_000;
     const now = Date.now();
-    const token = createAccessToken(secret, { ttlMs });
-    const value = token.create({ now });
+    const tokenManager = accessToken(secret, { ttlMs });
+    const value = tokenManager.create({ now });
     const [expiresAt] = value.split('.');
 
     expect(Number(expiresAt)).toBe(now + ttlMs);
-    expect(token.isValid(value)).toBe(true);
+    expect(tokenManager.isValid(value)).toBe(true);
   });
 
   it('rejects tokens signed with a different secret', () => {
-    const issuer = createAccessToken(secret);
-    const verifier = createAccessToken('other-secret');
+    const issuer = accessToken(secret);
+    const verifier = accessToken('other-secret');
 
     expect(verifier.isValid(issuer.create())).toBe(false);
   });
@@ -45,18 +45,18 @@ describe('createAccessToken', () => {
   it('applies clockToleranceMs when validating', () => {
     const ttlMs = 5_000;
     const clockToleranceMs = 3_000;
-    const token = createAccessToken(secret, { ttlMs, clockToleranceMs });
-    const value = token.create({ now: Date.now() - ttlMs - 1_000 });
+    const tokenManager = accessToken(secret, { ttlMs, clockToleranceMs });
+    const value = tokenManager.create({ now: Date.now() - ttlMs - 1_000 });
 
-    expect(token.isValid(value)).toBe(true);
+    expect(tokenManager.isValid(value)).toBe(true);
   });
 
   it('creates and validates tokens with custom data', () => {
-    const token = createAccessToken(secret);
+    const tokenManager = accessToken(secret);
     const data = { sub: 'user-1', scope: 'read' };
-    const value = token.create({ data });
+    const value = tokenManager.create({ data });
 
-    expect(token.isValid(value)).toBe(true);
-    expect(token.decode(value)?.data).toEqual(data);
+    expect(tokenManager.isValid(value)).toBe(true);
+    expect(tokenManager.decode(value)?.data).toEqual(data);
   });
 });

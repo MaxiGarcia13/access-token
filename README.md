@@ -18,29 +18,48 @@ npm install @maxigarcia/access-token
 ```
 
 ```ts
-import { createAccessToken, decodeToken } from '@maxigarcia/access-token';
+import { accessToken } from '@maxigarcia/access-token';
 
-const accessToken = createAccessToken(process.env.ACCESS_TOKEN_SECRET!, {
+const tokenManager = accessToken(process.env.ACCESS_TOKEN_SECRET!, {
   ttlMs: 10 * 60 * 1000, // 10 minutes
   clockToleranceMs: 5 * 60 * 1000, // 5 minutes
 });
 
 // Issue a token (e.g. set as a cookie after a successful challenge)
-const value = accessToken.create();
+const value = tokenManager.create();
 
 // Optional custom claims (base64url JSON payload)
-const withData = accessToken.create({
+const withData = tokenManager.create({
   data: { sub: 'user-1', scope: 'read' },
 });
 
 // Verify on protected routes
-if (!accessToken.isValid(value)) {
+if (!tokenManager.isValid(value)) {
   throw new Error('Unauthorized');
 }
 
 // Inspect without verifying
-const decoded = decodeToken(withData);
+const decoded = tokenManager.decode(withData);
 // { expiresAt, data: { sub, scope }, signature, signedPayload }
+```
+
+### Standalone helpers
+
+You can also use `decodeToken` and `isValidToken` directly — useful when you only need to parse or verify, without creating a manager.
+
+```ts
+import { decodeToken, isValidToken } from '@maxigarcia/access-token';
+
+// Parse without verifying signature or expiry
+const decoded = decodeToken(value);
+// { expiresAt, data, signature, signedPayload } | null
+
+// Build a validator (HMAC + expiry check)
+const isValid = isValidToken(process.env.ACCESS_TOKEN_SECRET!, 5 * 60 * 1000);
+
+if (!isValid(value)) {
+  throw new Error('Unauthorized');
+}
 ```
 
 ### Token format

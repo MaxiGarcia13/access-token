@@ -1,9 +1,8 @@
 import type { TokenData } from '@maxigarcia/access-token';
 import type { APIRoute } from 'astro';
 import {
-  createAccessToken,
+  accessToken,
   decodeToken,
-
 } from '@maxigarcia/access-token';
 
 export const prerender = false;
@@ -60,9 +59,9 @@ export const POST: APIRoute = async ({ request }) => {
     const ttlMs = typeof body.ttlMs === 'number' && body.ttlMs > 0 ? body.ttlMs : undefined;
     const now = typeof body.now === 'number' ? body.now : undefined;
     const data = isRecord(body.data) ? (body.data as TokenData) : undefined;
-    const accessToken = createAccessToken(secret, { ttlMs });
-    const token = accessToken.create({ data, now });
-    const decoded = accessToken.decode(token);
+    const tokenManager = accessToken(secret, { ttlMs });
+    const token = tokenManager.create({ data, now });
+    const decoded = tokenManager.decode(token);
 
     return json({
       ok: true,
@@ -85,9 +84,9 @@ export const POST: APIRoute = async ({ request }) => {
       = typeof body.clockToleranceMs === 'number' && body.clockToleranceMs >= 0
         ? body.clockToleranceMs
         : undefined;
-    const accessToken = createAccessToken(secret, { clockToleranceMs });
-    const decoded = accessToken.decode(token);
-    const valid = accessToken.isValid(token);
+    const tokenManager = accessToken(secret, { clockToleranceMs });
+    const decoded = tokenManager.decode(token);
+    const valid = tokenManager.isValid(token);
 
     return json({
       ok: true,
