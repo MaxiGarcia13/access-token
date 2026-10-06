@@ -1,3 +1,14 @@
+## 1.0.2 (2026-10-06)
+
+### 🔄 Refactors
+
+- Introduce isValidToken function and update documentation ([dc39471](https://github.com/MaxiGarcia13/access-token/commit/dc39471))
+- Replace isValidToken with createTokenValidator in documentation and implementation ([60dc6f3](https://github.com/MaxiGarcia13/access-token/commit/60dc6f3))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 1.0.1 (2026-10-06)
 
 ### 🔄 Refactors
