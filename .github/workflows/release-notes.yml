@@ -1,0 +1,86 @@
+name: Release Notes
+
+on:
+  workflow_call:
+
+jobs:
+  create-releases:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Pull latest tags
+        run: git fetch --tags --force
+
+      - name: Create GitHub Releases from changelogs
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          set -euo pipefail
+          git fetch --tags --force
+
+          changelog_for() {
+            case "$1" in
+              '@maxigarcia/access-token') echo 'packages/access-token/CHANGELOG.md' ;;
+              'app') echo 'packages/app/CHANGELOG.md' ;;
+              *) return 1 ;;
+            esac
+          }
+
+          extract_section() {
+            local file="$1" version="$2"
+            awk -v ver="$version" '
+              $0 ~ "^## " ver "( |$)" {found=1; print; next}
+              found && /^## / {exit}
+              found {print}
+            ' "$file"
+          }
+
+          release_commit=$(git log -1 --grep='^chore(release):' --format='%H' || true)
+          tags=""
+          if [ -n "${release_commit:-}" ]; then
+            tags=$(git tag --points-at "$release_commit" | grep '@' || true)
+          fi
+
+          if [ -z "$tags" ]; then
+            tags=$(git tag -l '*@*' --sort=creatordate)
+          fi
+
+          for tag in $tags; do
+            if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+              echo "Release $tag already exists, skipping."
+              continue
+            fi
+
+            project="${tag%@*}"
+            version="${tag##*@}"
+            if ! changelog=$(changelog_for "$project"); then
+              echo "No changelog mapping for $project, skipping $tag"
+              continue
+            fi
+
+            notes=$(extract_section "$changelog" "$version")
+            if [ -z "$notes" ]; then
+              echo "No changelog section for $tag in $changelog, skipping."
+              continue
+            fi
+
+            notes_file=$(mktemp)
+            printf '%s\n' "$notes" > "$notes_file"
+
+            gh release create "$tag" \
+              --repo "${{ github.repository }}" \
+              --title "$tag" \
+              --notes-file "$notes_file" \
+              --verify-tag
+
+            rm -f "$notes_file"
+            echo "Created release $tag"
+          done
