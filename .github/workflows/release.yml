@@ -28,7 +28,7 @@ jobs:
         with:
           cache: npm
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
 
       - run: npm ci
 
@@ -60,6 +60,9 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Pull latest tags
+        run: git fetch --tags --force
 
       - name: Create GitHub Releases from changelogs
         env:
