@@ -1,3 +1,17 @@
+## 0.2.2 (2026-10-06)
+
+### 💥 Breaking Changes
+
+- Update access token management in README and implementation ([80f4a36](https://github.com/MaxiGarcia13/access-token/commit/80f4a36))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/access-token to 1.0.0
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.2.1 (2026-10-04)
 
 ### 🧹 Chores

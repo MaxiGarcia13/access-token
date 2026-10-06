@@ -1,3 +1,18 @@
+# 1.0.0 (2026-10-06)
+
+### 📚 Documentation
+
+- Standardize string quotes in README examples for access-token package ([5ff90ac](https://github.com/MaxiGarcia13/access-token/commit/5ff90ac))
+- Revise README for access-token package to clarify purpose and usage ([4628beb](https://github.com/MaxiGarcia13/access-token/commit/4628beb))
+
+### 💥 Breaking Changes
+
+- Update access token management in README and implementation ([80f4a36](https://github.com/MaxiGarcia13/access-token/commit/80f4a36))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.8.1 (2026-10-04)
 
 This was a version bump only for @maxigarcia/access-token to align it with other projects, there were no code changes.
