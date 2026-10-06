@@ -1,7 +1,7 @@
 import type { AccessToken, AccessTokenOptions } from './types.js';
+import { createTokenValidator } from './create-token-validator.js';
 import { createTokenValue } from './create-token-value.js';
 import { decodeToken } from './decode-token.js';
-import { isValidToken } from './is-valid-token.js';
 
 const TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 const DEFAULT_CLOCK_TOLERANCE_MS = 0;
@@ -23,7 +23,7 @@ export function accessToken(
 ): AccessToken {
   return {
     create: createTokenValue(secret, options.ttlMs ?? TOKEN_TTL_MS),
-    isValid: isValidToken(secret, options.clockToleranceMs ?? DEFAULT_CLOCK_TOLERANCE_MS),
+    isValid: createTokenValidator(secret, options.clockToleranceMs ?? DEFAULT_CLOCK_TOLERANCE_MS),
     decode: decodeToken,
   };
 }

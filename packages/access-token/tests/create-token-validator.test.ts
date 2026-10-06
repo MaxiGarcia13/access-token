@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
+import { createTokenValidator } from '../src/create-token-validator.js';
 import { createTokenValue } from '../src/create-token-value.js';
-import { isValidToken } from '../src/is-valid-token.js';
 import { sign } from '../src/sign.js';
 
-describe('isValidToken', () => {
+describe('createTokenValidator', () => {
   const secret = 'test-secret';
   const ttlMs = 60_000;
-  const isValid = isValidToken(secret);
+  const isValid = createTokenValidator(secret);
 
   it('returns true for a freshly created token', () => {
     const value = createTokenValue(secret, ttlMs)();
@@ -41,7 +41,7 @@ describe('isValidToken', () => {
 
   it('accepts tokens within clockToleranceMs after expiry', () => {
     const clockToleranceMs = 5_000;
-    const isValidWithTolerance = isValidToken(secret, clockToleranceMs);
+    const isValidWithTolerance = createTokenValidator(secret, clockToleranceMs);
     const expiredBy = 2_000;
     const value = createTokenValue(secret, ttlMs)({ now: Date.now() - ttlMs - expiredBy });
 
@@ -51,7 +51,7 @@ describe('isValidToken', () => {
 
   it('rejects tokens that are beyond clockToleranceMs', () => {
     const clockToleranceMs = 1_000;
-    const isValidWithTolerance = isValidToken(secret, clockToleranceMs);
+    const isValidWithTolerance = createTokenValidator(secret, clockToleranceMs);
     const value = createTokenValue(secret, ttlMs)({ now: Date.now() - ttlMs - 2_000 });
 
     expect(isValidWithTolerance(value)).toBe(false);
@@ -81,6 +81,6 @@ describe('isValidToken', () => {
   it('rejects payload tokens signed with a different secret', () => {
     const value = createTokenValue(secret, ttlMs)({ data: { room: 'a1' } });
 
-    expect(isValidToken('other-secret')(value)).toBe(false);
+    expect(createTokenValidator('other-secret')(value)).toBe(false);
   });
 });
